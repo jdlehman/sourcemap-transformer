@@ -188,6 +188,6 @@ yourDataStream.pipe(sourceMapTransformer).pipe(console.log);
 
 ## Thanks
 
-- @demerzel3 for [karma-sourcemap-loader](https://github.com/demerzel3/karma-sourcemap-loader) that was the basis and inspiration for `sourcemap-transformer`, but with the goal of working in environments outside of [karma](http://karma-runner.github.io/0.13/index.html).
+- [@demerzel3](https://github.com/demerzel3) for [karma-sourcemap-loader](https://github.com/demerzel3/karma-sourcemap-loader) that was the basis and inspiration for `sourcemap-transformer`, but with the goal of working in environments outside of [karma](http://karma-runner.github.io/0.13/index.html).
 - [mozilla](https://github.com/mozilla) for the awesome [source-map](https://github.com/mozilla/source-map/) library that is being utilized to parse the retrieved source maps.
-- @whatknight for pairing/helping debug some earlier and uglier prototypes
+- [@whatknight](https://github.com/whatknight) for pairing/helping debug some earlier and uglier prototypes
