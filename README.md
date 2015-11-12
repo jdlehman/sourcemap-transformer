@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/sourcemap-transformer.svg)](http://badge.fury.io/js/sourcemap-transformer)
+
 # sourcemap-transformer
 
 `sourcemap-transformer` takes a stream of data containing references to files and line numbers (eg. stack traces) from compiled/built JS and transforms the output to reference the original files and line numbers.
