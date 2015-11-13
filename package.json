@@ -1,6 +1,6 @@
 {
   "name": "sourcemap-transformer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Transforms a stream containing stack traces from compiled output to reference the original files and line numbers using source maps",
   "main": "dist/sourcemap-transformer.min.js",
   "scripts": {
