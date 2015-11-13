@@ -13,6 +13,8 @@ import {
   defaultPrevFileColumnNumber
 } from './defaultConfig';
 
+var smcCache = {};
+
 export function createSourceMapTransformer({
   newFileRegex = defaultNewFileRegex,
   prevFileRegex = defaultPrevFileRegex,
@@ -27,7 +29,6 @@ export function createSourceMapTransformer({
   var sourceMapTransformer = new stream.Transform({objectMode: true});
   sourceMapTransformer._transform = function(chunk, something, done){
     var lastSmc;
-    var smcCache = {};
     var transformedChunk = chunk.toString().split('\n').map(function(line) {
       if (newFileRegex.test(line)) {
         let match = line.match(newFileRegex);
