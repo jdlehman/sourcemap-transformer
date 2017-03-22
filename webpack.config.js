@@ -1,10 +1,18 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
   entry: './src',
   module: {
-    loaders: [
-      {test: /\.js$/, loader: 'babel', exclude: /node_modules/}
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          presets: [['es2015', {'modules': false}]]
+        },
+        exclude: /node_modules/
+      }
     ]
   },
   output: {
@@ -13,19 +21,30 @@ module.exports = {
     library: 'sourcemap-transformer'
   },
   resolve: {
-    extensions: ['', '.js'],
-    modulesDirectories: ['node_modules'],
-    fallback: __dirname
+    extensions: ['.js'],
+    modules: ['node_modules', path.join(__dirname, 'src'), __dirname]
   },
   target: 'node',
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      output: {
+        comments: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: __dirname
+      },
+      minimize: true
+    })
   ]
 };
