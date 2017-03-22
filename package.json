@@ -19,6 +19,9 @@
     "phantomjs"
   ],
   "author": "Jonathan Lehman <jonathan.lehman91@gmail.com>",
+  "contributors": [
+    "Brett Zamir <brettz9@yahoo.com>"
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-core": "6.24.0",
