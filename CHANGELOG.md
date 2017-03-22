@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 (2017-03-21)
+
+- Updated dependencies
+
 ## 1.2.0 (2015-11-13)
 
 Added:
