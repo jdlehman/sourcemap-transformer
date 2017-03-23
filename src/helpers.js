@@ -6,8 +6,9 @@ function fileStr(filePath) {
 }
 
 function decodeInlineSourceMap(inlineSourceMap){
-  if (/^;base64,/.test(inlineSourceMap)) {
-    var buffer = new Buffer(inlineSourceMap.slice(';base64,'.length), 'base64');
+  var encoding = /^(?:;charset=utf-8)?;base64,/;
+  if (encoding.test(inlineSourceMap)) {
+    var buffer = new Buffer(inlineSourceMap.slice(inlineSourceMap.match(encoding)[0].length), 'base64');
     return buffer.toString();
   } else {
     return decodeURIComponent(inlineSourceMap);
