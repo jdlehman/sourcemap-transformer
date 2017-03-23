@@ -1179,11 +1179,11 @@ exports.SourceMapGenerator = SourceMapGenerator;
 /* harmony export (immutable) */ __webpack_exports__["g"] = defaultPrevFileFormattingSpaces;
 /* harmony export (immutable) */ __webpack_exports__["h"] = defaultPrevFileLineNumber;
 /* harmony export (immutable) */ __webpack_exports__["i"] = defaultPrevFileColumnNumber;
-var defaultNewFileRegex = /^(\s*)at file:\/\/(.*):(\d*)/;
-var defaultPrevFileRegex = /^(\s*)at.*:(\d*)/;
+var defaultNewFileRegex = /^(\s*)at file:\/\/(.+):(\d+)/;
+var defaultPrevFileRegex = /^(\s*)at.*:(\d+)/;
 
 function defaultNewFileFormattingSpaces(match) {
-  return match[1];
+  return match[1] || '';
 }
 
 function defaultNewFilePath(match) {
@@ -1199,7 +1199,7 @@ function defaultNewFileColumnNumber(match) {
 }
 
 function defaultPrevFileFormattingSpaces(match) {
-  return match[1];
+  return match[1] || '';
 }
 
 function defaultPrevFileLineNumber(match) {
@@ -1229,8 +1229,9 @@ function fileStr(filePath) {
 }
 
 function decodeInlineSourceMap(inlineSourceMap) {
-  if (/^;base64,/.test(inlineSourceMap)) {
-    var buffer = new Buffer(inlineSourceMap.slice(';base64,'.length), 'base64');
+  var encoding = /^(?:;charset=utf-8)?;base64,/;
+  if (encoding.test(inlineSourceMap)) {
+    var buffer = new Buffer(inlineSourceMap.slice(inlineSourceMap.match(encoding)[0].length), 'base64');
     return buffer.toString();
   } else {
     return decodeURIComponent(inlineSourceMap);

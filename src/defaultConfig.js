@@ -1,8 +1,8 @@
-export const defaultNewFileRegex = /^(\s*)at file:\/\/(.*):(\d*)/;
-export const defaultPrevFileRegex = /^(\s*)at.*:(\d*)/;
+export const defaultNewFileRegex = /^(\s*)at file:\/\/(.+):(\d+)/;
+export const defaultPrevFileRegex = /^(\s*)at.*:(\d+)/;
 
 export function defaultNewFileFormattingSpaces(match) {
-  return match[1];
+  return match[1] || '';
 }
 
 export function defaultNewFilePath(match) {
@@ -18,7 +18,7 @@ export function defaultNewFileColumnNumber(match) {
 }
 
 export function defaultPrevFileFormattingSpaces(match) {
-  return match[1];
+  return match[1] || '';
 }
 
 export function defaultPrevFileLineNumber(match) {
@@ -28,4 +28,3 @@ export function defaultPrevFileLineNumber(match) {
 export function defaultPrevFileColumnNumber(match) {
   return 0;
 }
-
