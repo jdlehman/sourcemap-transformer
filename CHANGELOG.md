@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1 (2017-03-24)
+
+Fixed:
+
+- Handle charset=utf8 source maps [7fcce95](../../commit/7fcce95)
+- Improve default regex matchers [cec07bd](../../commit/cec07bd)
+
 ## 1.3.0 (2017-03-21)
 
 - Updated dependencies
