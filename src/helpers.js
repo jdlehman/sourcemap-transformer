@@ -40,7 +40,6 @@ export function getRawSourceMap (filePath) {
 export function originalPositionStr (formattingSpaces, originalPosition, untransformedOutput) {
   if (originalPosition.source) {
     return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
-  } else {
-    return untransformedOutput;
   }
+  return untransformedOutput;
 }

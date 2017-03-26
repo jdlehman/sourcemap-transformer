@@ -49,7 +49,8 @@ export function createSourceMapTransformer ({
           column: columnNumber
         });
         return originalPositionStr(formattingSpaces, originalPosition, line);
-      } else if (prevFileRegex.test(line) && lastSmc) {
+      }
+      if (prevFileRegex.test(line) && lastSmc) {
         const match = line.match(prevFileRegex);
         const formattingSpaces = prevFileFormattingSpaces(match);
         const lineNumber = prevFileLineNumber(match);
@@ -60,9 +61,8 @@ export function createSourceMapTransformer ({
           column: columnNumber
         });
         return originalPositionStr(formattingSpaces, originalPosition, line);
-      } else {
-        return line;
       }
+      return line;
     }).join('\n');
     this.push(transformedChunk);
     done();
