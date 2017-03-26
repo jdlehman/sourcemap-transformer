@@ -13,8 +13,8 @@ npm install --save sourcemap-transformer
 ## Usage
 
 ```js
-var createSourceMapTransformer = require('sourcemap-transformer').createSourceMapTransformer;
-var sourceMapTransformer = createSourceMapTransformer();
+const createSourceMapTransformer = require('sourcemap-transformer').createSourceMapTransformer;
+const sourceMapTransformer = createSourceMapTransformer();
 
 yourDataStream.pipe(sourceMapTransformer).pipe(console.log);
 ```
@@ -41,7 +41,7 @@ Mileage may vary with the default configuration options as they assume [phantomj
       at timeslice (:12326)
 
 # example output
- 1) App renders:
+1) App renders:
      AssertionError: expected 1 to equal 2
       webpack:///~/chai/lib/chai/assertion.js:111
       webpack:///~/chai/lib/chai/interface/assert.js:126
@@ -132,8 +132,8 @@ Used in conjunction with the `prevFileRegex`, this option is a function that rec
 ### Example using custom configuration
 
 ```js
-var createSourceMapTransformer = require('sourcemap-transformer').createSourceMapTransformer;
-var sourceMapTransformer = createSourceMapTransformer({
+const createSourceMapTransformer = require('sourcemap-transformer').createSourceMapTransformer;
+const sourceMapTransformer = createSourceMapTransformer({
   newFileRegex: /(.*) at (\d*):(\d*)/
   newFileFormattingSpaces: function() {
     return '  ';
