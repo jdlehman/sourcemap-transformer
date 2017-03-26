@@ -1233,22 +1233,21 @@ function decodeInlineSourceMap(inlineSourceMap) {
   if (encoding.test(inlineSourceMap)) {
     var buffer = new Buffer(inlineSourceMap.slice(inlineSourceMap.match(encoding)[0].length), 'base64');
     return buffer.toString();
-  } else {
-    return decodeURIComponent(inlineSourceMap);
   }
+  return decodeURIComponent(inlineSourceMap);
 }
 
 function getRawSourceMap(filePath) {
   var fileData = fileStr(filePath);
   var lines = fileData.split(/\n/);
   var lastLine = lines.pop();
-  while (new RegExp("^\\s*$").test(lastLine)) {
+  while (new RegExp('^\\s*$').test(lastLine)) {
     lastLine = lines.pop();
   }
 
   var match = /^\/\/#\s*sourceMappingURL=(.+)$/.exec(lastLine);
   var sourceMapUrl = match && match[1];
-  var rawSourceMap;
+  var rawSourceMap = void 0;
   if (!sourceMapUrl) {
     rawSourceMap = fileStr(filePath + '.map');
   } else if (/^data:application\/json/.test(sourceMapUrl)) {
@@ -1263,9 +1262,8 @@ function getRawSourceMap(filePath) {
 function originalPositionStr(formattingSpaces, originalPosition, untransformedOutput) {
   if (originalPosition.source) {
     return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
-  } else {
-    return untransformedOutput;
   }
+  return untransformedOutput;
 }
 
 /***/ }),
@@ -1331,7 +1329,7 @@ function createSourceMapTransformer() {
 
   var sourceMapTransformer = new __WEBPACK_IMPORTED_MODULE_0_stream___default.a.Transform({ objectMode: true });
   sourceMapTransformer._transform = function (chunk, something, done) {
-    var lastSmc;
+    var lastSmc = void 0;
     var transformedChunk = chunk.toString().split('\n').map(function (line) {
       if (newFileRegex.test(line)) {
         var match = line.match(newFileRegex);
@@ -1352,7 +1350,8 @@ function createSourceMapTransformer() {
           column: columnNumber
         });
         return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(formattingSpaces, originalPosition, line);
-      } else if (prevFileRegex.test(line) && lastSmc) {
+      }
+      if (prevFileRegex.test(line) && lastSmc) {
         var _match = line.match(prevFileRegex);
         var _formattingSpaces = prevFileFormattingSpaces(_match);
         var _lineNumber = prevFileLineNumber(_match);
@@ -1363,9 +1362,8 @@ function createSourceMapTransformer() {
           column: _columnNumber
         });
         return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(_formattingSpaces, _originalPosition, line);
-      } else {
-        return line;
       }
+      return line;
     }).join('\n');
     this.push(transformedChunk);
     done();
