@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
 function addPlugins (obj, i) {
   obj.plugins = [
@@ -29,7 +29,7 @@ function addPlugins (obj, i) {
   return obj;
 }
 
-var cfg = {
+const cfg = {
   entry: './src',
   module: {
     rules: [
@@ -55,7 +55,7 @@ var cfg = {
   target: 'node'
 };
 
-var cfgMinified = Object.assign({}, cfg); // Clone top level
+const cfgMinified = Object.assign({}, cfg); // Clone top level
 cfgMinified.output = Object.assign({}, cfg.output); // Clone deeper level
 cfgMinified.output.filename = cfgMinified.output.filename.replace(/\.js$/, '.min.js');
 

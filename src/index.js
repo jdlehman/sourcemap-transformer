@@ -13,9 +13,9 @@ import {
   defaultPrevFileColumnNumber
 } from './defaultConfig';
 
-var smcCache = {};
+const smcCache = {};
 
-export function createSourceMapTransformer({
+export function createSourceMapTransformer ({
   newFileRegex = defaultNewFileRegex,
   prevFileRegex = defaultPrevFileRegex,
   newFileFormattingSpaces = defaultNewFileFormattingSpaces,
@@ -26,36 +26,36 @@ export function createSourceMapTransformer({
   prevFileLineNumber = defaultPrevFileLineNumber,
   prevFileColumnNumber = defaultPrevFileColumnNumber
 } = {}) {
-  var sourceMapTransformer = new stream.Transform({objectMode: true});
-  sourceMapTransformer._transform = function(chunk, something, done){
-    var lastSmc;
-    var transformedChunk = chunk.toString().split('\n').map(function(line) {
+  const sourceMapTransformer = new stream.Transform({objectMode: true});
+  sourceMapTransformer._transform = function (chunk, something, done) {
+    let lastSmc;
+    const transformedChunk = chunk.toString().split('\n').map(function (line) {
       if (newFileRegex.test(line)) {
-        let match = line.match(newFileRegex);
-        let formattingSpaces = newFileFormattingSpaces(match);
-        let filePath = newFilePath(match);
-        let lineNumber = newFileLineNumber(match);
-        let columnNumber = newFileColumnNumber(match);
+        const match = line.match(newFileRegex);
+        const formattingSpaces = newFileFormattingSpaces(match);
+        const filePath = newFilePath(match);
+        const lineNumber = newFileLineNumber(match);
+        const columnNumber = newFileColumnNumber(match);
 
         if (!smcCache[filePath]) {
-          let rawSourceMap = getRawSourceMap(filePath);
+          const rawSourceMap = getRawSourceMap(filePath);
           lastSmc = new SourceMapConsumer(rawSourceMap);
           smcCache[filePath] = lastSmc;
         } else {
           lastSmc = smcCache[filePath];
         }
-        let originalPosition = lastSmc.originalPositionFor({
+        const originalPosition = lastSmc.originalPositionFor({
           line: lineNumber,
           column: columnNumber
         });
         return originalPositionStr(formattingSpaces, originalPosition, line);
       } else if (prevFileRegex.test(line) && lastSmc) {
-        let match = line.match(prevFileRegex);
-        let formattingSpaces = prevFileFormattingSpaces(match);
-        let lineNumber = prevFileLineNumber(match);
-        let columnNumber = prevFileColumnNumber(match);
+        const match = line.match(prevFileRegex);
+        const formattingSpaces = prevFileFormattingSpaces(match);
+        const lineNumber = prevFileLineNumber(match);
+        const columnNumber = prevFileColumnNumber(match);
 
-        let originalPosition = lastSmc.originalPositionFor({
+        const originalPosition = lastSmc.originalPositionFor({
           line: lineNumber,
           column: columnNumber
         });
@@ -68,7 +68,7 @@ export function createSourceMapTransformer({
     done();
   };
 
-  sourceMapTransformer._flush = function(done){
+  sourceMapTransformer._flush = function (done) {
     done();
   };
 

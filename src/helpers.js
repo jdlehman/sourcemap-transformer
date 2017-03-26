@@ -1,31 +1,31 @@
 import fs from 'fs';
 import path from 'path';
 
-function fileStr(filePath) {
+function fileStr (filePath) {
   return fs.readFileSync(filePath).toString();
 }
 
-function decodeInlineSourceMap(inlineSourceMap){
-  var encoding = /^(?:;charset=utf-8)?;base64,/;
+function decodeInlineSourceMap (inlineSourceMap) {
+  const encoding = /^(?:;charset=utf-8)?;base64,/;
   if (encoding.test(inlineSourceMap)) {
-    var buffer = new Buffer(inlineSourceMap.slice(inlineSourceMap.match(encoding)[0].length), 'base64');
+    const buffer = new Buffer(inlineSourceMap.slice(inlineSourceMap.match(encoding)[0].length), 'base64');
     return buffer.toString();
   } else {
     return decodeURIComponent(inlineSourceMap);
   }
 }
 
-export function getRawSourceMap(filePath) {
-  var fileData = fileStr(filePath);
-  var lines = fileData.split(/\n/);
-  var lastLine = lines.pop();
-  while (new RegExp("^\\s*$").test(lastLine)) {
+export function getRawSourceMap (filePath) {
+  const fileData = fileStr(filePath);
+  const lines = fileData.split(/\n/);
+  let lastLine = lines.pop();
+  while (new RegExp('^\\s*$').test(lastLine)) {
     lastLine = lines.pop();
   }
 
-  var match = /^\/\/#\s*sourceMappingURL=(.+)$/.exec(lastLine);
-  var sourceMapUrl = match && match[1];
-  var rawSourceMap;
+  const match = /^\/\/#\s*sourceMappingURL=(.+)$/.exec(lastLine);
+  const sourceMapUrl = match && match[1];
+  let rawSourceMap;
   if (!sourceMapUrl) {
     rawSourceMap = fileStr(filePath + '.map');
   } else if (/^data:application\/json/.test(sourceMapUrl)) {
@@ -37,7 +37,7 @@ export function getRawSourceMap(filePath) {
   return JSON.parse(rawSourceMap);
 }
 
-export function originalPositionStr(formattingSpaces, originalPosition, untransformedOutput) {
+export function originalPositionStr (formattingSpaces, originalPosition, untransformedOutput) {
   if (originalPosition.source) {
     return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
   } else {
