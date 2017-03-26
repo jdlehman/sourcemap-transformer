@@ -10,9 +10,8 @@ function decodeInlineSourceMap (inlineSourceMap) {
   if (encoding.test(inlineSourceMap)) {
     const buffer = new Buffer(inlineSourceMap.slice(inlineSourceMap.match(encoding)[0].length), 'base64');
     return buffer.toString();
-  } else {
-    return decodeURIComponent(inlineSourceMap);
   }
+  return decodeURIComponent(inlineSourceMap);
 }
 
 export function getRawSourceMap (filePath) {
