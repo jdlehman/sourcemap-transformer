@@ -2,7 +2,7 @@
 
 # sourcemap-transformer
 
-`sourcemap-transformer` takes a stream of data containing references to files and line numbers (eg. stack traces) from compiled/built JS and transforms the output to reference the original files and line numbers.
+`sourcemap-transformer` takes a stream of data containing references to files and line numbers (eg. stack traces) from compiled/built JavaScript and transforms the output to reference the original files and line numbers.
 
 ## Installation
 
@@ -21,7 +21,7 @@ yourDataStream.pipe(sourceMapTransformer).pipe(console.log);
 
 ## Configuration
 
-Mileage may vary with the default configuration options as they assume [phantomjs](http://phantomjs.org/) stack trace output (from errors or failures in tests). For example, the default configuration could handle the following:
+Mileage may vary with the default configuration options as they assume [Mocha](https://mochajs.org/) using [PhantomJS](http://phantomjs.org/) stack trace output (from errors or failures in tests). This project initially came out of the need to support source maps in an older version of PhantomJS that did not support source maps out of the box. See the configuration options further down for handling stack traces in a different format. That said, the default configuration could handle the following:
 
 ```sh
 # example input
