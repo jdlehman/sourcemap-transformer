@@ -1298,6 +1298,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_source_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_source_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__defaultConfig__ = __webpack_require__(4);
+/* harmony export (immutable) */ __webpack_exports__["transformSourceMapString"] = transformSourceMapString;
 /* harmony export (immutable) */ __webpack_exports__["createSourceMapTransformer"] = createSourceMapTransformer;
 
 
@@ -1306,8 +1307,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var smcCache = {};
 
-function createSourceMapTransformer() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+function transformSourceMapString(sourceMapString) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
       _ref$newFileRegex = _ref.newFileRegex,
       newFileRegex = _ref$newFileRegex === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["a" /* defaultNewFileRegex */] : _ref$newFileRegex,
       _ref$prevFileRegex = _ref.prevFileRegex,
@@ -1327,44 +1328,48 @@ function createSourceMapTransformer() {
       _ref$prevFileColumnNu = _ref.prevFileColumnNumber,
       prevFileColumnNumber = _ref$prevFileColumnNu === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["i" /* defaultPrevFileColumnNumber */] : _ref$prevFileColumnNu;
 
+  var lastSmc = void 0;
+  return sourceMapString.split('\n').map(function (line) {
+    if (newFileRegex.test(line)) {
+      var match = line.match(newFileRegex);
+      var formattingSpaces = newFileFormattingSpaces(match);
+      var filePath = newFilePath(match);
+      var lineNumber = newFileLineNumber(match);
+      var columnNumber = newFileColumnNumber(match);
+
+      if (!smcCache[filePath]) {
+        var rawSourceMap = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["a" /* getRawSourceMap */])(filePath);
+        lastSmc = new __WEBPACK_IMPORTED_MODULE_1_source_map__["SourceMapConsumer"](rawSourceMap);
+        smcCache[filePath] = lastSmc;
+      } else {
+        lastSmc = smcCache[filePath];
+      }
+      var originalPosition = lastSmc.originalPositionFor({
+        line: lineNumber,
+        column: columnNumber
+      });
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(formattingSpaces, originalPosition, line);
+    }
+    if (prevFileRegex.test(line) && lastSmc) {
+      var _match = line.match(prevFileRegex);
+      var _formattingSpaces = prevFileFormattingSpaces(_match);
+      var _lineNumber = prevFileLineNumber(_match);
+      var _columnNumber = prevFileColumnNumber(_match);
+
+      var _originalPosition = lastSmc.originalPositionFor({
+        line: _lineNumber,
+        column: _columnNumber
+      });
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(_formattingSpaces, _originalPosition, line);
+    }
+    return line;
+  }).join('\n');
+}
+
+function createSourceMapTransformer(opts) {
   var sourceMapTransformer = new __WEBPACK_IMPORTED_MODULE_0_stream___default.a.Transform({ objectMode: true });
   sourceMapTransformer._transform = function (chunk, something, done) {
-    var lastSmc = void 0;
-    var transformedChunk = chunk.toString().split('\n').map(function (line) {
-      if (newFileRegex.test(line)) {
-        var match = line.match(newFileRegex);
-        var formattingSpaces = newFileFormattingSpaces(match);
-        var filePath = newFilePath(match);
-        var lineNumber = newFileLineNumber(match);
-        var columnNumber = newFileColumnNumber(match);
-
-        if (!smcCache[filePath]) {
-          var rawSourceMap = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["a" /* getRawSourceMap */])(filePath);
-          lastSmc = new __WEBPACK_IMPORTED_MODULE_1_source_map__["SourceMapConsumer"](rawSourceMap);
-          smcCache[filePath] = lastSmc;
-        } else {
-          lastSmc = smcCache[filePath];
-        }
-        var originalPosition = lastSmc.originalPositionFor({
-          line: lineNumber,
-          column: columnNumber
-        });
-        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(formattingSpaces, originalPosition, line);
-      }
-      if (prevFileRegex.test(line) && lastSmc) {
-        var _match = line.match(prevFileRegex);
-        var _formattingSpaces = prevFileFormattingSpaces(_match);
-        var _lineNumber = prevFileLineNumber(_match);
-        var _columnNumber = prevFileColumnNumber(_match);
-
-        var _originalPosition = lastSmc.originalPositionFor({
-          line: _lineNumber,
-          column: _columnNumber
-        });
-        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(_formattingSpaces, _originalPosition, line);
-      }
-      return line;
-    }).join('\n');
+    var transformedChunk = transformSourceMapString(chunk.toString(), opts);
     this.push(transformedChunk);
     done();
   };
