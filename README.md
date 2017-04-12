@@ -10,13 +10,20 @@
 npm install --save sourcemap-transformer
 ```
 
-## Usage
+## Usage (Streams)
 
 ```js
 const createSourceMapTransformer = require('sourcemap-transformer').createSourceMapTransformer;
-const sourceMapTransformer = createSourceMapTransformer();
+const sourceMapTransformer = createSourceMapTransformer(optionalOptions);
 
 yourDataStream.pipe(sourceMapTransformer).pipe(console.log);
+```
+
+## Usage (Strings)
+
+```js
+const transformSourceMapString = require('sourcemap-transformer').transformSourceMapString;
+console.log(transformSourceMapString(yourDataString, optionalOptions));
 ```
 
 ## Configuration
@@ -59,7 +66,7 @@ Mileage may vary with the default configuration options as they assume [Mocha](h
 
 Notice that lines that do not contain information regarding file or line numbers are not transformed. Also notice that in the case that the line number is not found in the source map, it is also unchanged.
 
-Clearly assuming a similar structure of data is limiting. For this reason, the `createSourceMapTransformer` function takes a configuration option to handle input streams in different formats.
+Clearly assuming a similar structure of data is limiting. For this reason, the `createSourceMapTransformer` and `transformSourceMapString` functions take a configuration option to handle input streams in different formats.
 
 ### Configuration options
 
