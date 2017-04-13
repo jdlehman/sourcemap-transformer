@@ -136,6 +136,12 @@ Used in conjunction with the `newFileRegex`, this option is a function that rece
 
 Used in conjunction with the `prevFileRegex`, this option is a function that receives the match array from the `prevFileRegex` and returns a string representing the column number referenced in the input stream.
 
+#### originalPositionString
+
+> (formattingSpaces: String, originalPosition: {source: String, line: Number|String, column: Number|String}, untransformedOutput: String, match: Array, prev: Boolean): originalPosition: String
+
+This option is a function that receives the original spaces for formatting as a string; an object containing the source file (if one could be found), the source line number, and the source column number; the untransformed output as a string; the whole regular expression match; and a boolean indicating whether this formatting is for a match with `prevFileRegex` (`true`) or the usual `newFileRegex`. The function returns the formatted line.
+
 #### cache
 
 > boolean = true

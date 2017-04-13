@@ -1211,7 +1211,7 @@ function defaultPrevFileColumnNumber(match) {
   return 0;
 }
 
-function defaultOriginalPositionString(formattingSpaces, originalPosition, untransformedOutput /*, prev=false */) {
+function defaultOriginalPositionString(formattingSpaces, originalPosition, untransformedOutput /*, match, prev=false */) {
   if (originalPosition.source) {
     return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
   }
@@ -1357,7 +1357,7 @@ function transformSourceMapString(sourceMapString) {
         line: lineNumber,
         column: columnNumber
       });
-      return originalPositionString(formattingSpaces, originalPosition, line);
+      return originalPositionString(formattingSpaces, originalPosition, line, match);
     }
     if (prevFileRegex.test(line) && lastSmc) {
       var _match = line.match(prevFileRegex);
@@ -1369,7 +1369,7 @@ function transformSourceMapString(sourceMapString) {
         line: _lineNumber,
         column: _columnNumber
       });
-      return originalPositionString(_formattingSpaces, _originalPosition, line, true);
+      return originalPositionString(_formattingSpaces, _originalPosition, line, _match, true);
     }
     return line;
   }).join('\n');

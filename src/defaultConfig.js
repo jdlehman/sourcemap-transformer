@@ -29,7 +29,7 @@ export function defaultPrevFileColumnNumber (match) {
   return 0;
 }
 
-export function defaultOriginalPositionString (formattingSpaces, originalPosition, untransformedOutput /*, prev=false */) {
+export function defaultOriginalPositionString (formattingSpaces, originalPosition, untransformedOutput /*, match, prev=false */) {
   if (originalPosition.source) {
     return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
   }

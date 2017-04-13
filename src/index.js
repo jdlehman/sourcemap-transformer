@@ -53,7 +53,7 @@ export function transformSourceMapString (sourceMapString, {
         line: lineNumber,
         column: columnNumber
       });
-      return originalPositionString(formattingSpaces, originalPosition, line);
+      return originalPositionString(formattingSpaces, originalPosition, line, match);
     }
     if (prevFileRegex.test(line) && lastSmc) {
       const match = line.match(prevFileRegex);
@@ -65,7 +65,7 @@ export function transformSourceMapString (sourceMapString, {
         line: lineNumber,
         column: columnNumber
       });
-      return originalPositionString(formattingSpaces, originalPosition, line, true);
+      return originalPositionString(formattingSpaces, originalPosition, line, match, true);
     }
     return line;
   }).join('\n');
