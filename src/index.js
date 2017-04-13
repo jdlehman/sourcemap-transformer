@@ -13,7 +13,11 @@ import {
   defaultPrevFileColumnNumber
 } from './defaultConfig';
 
-const smcCache = {};
+let smcCache = {};
+
+export function emptyCache () {
+  smcCache = {};
+}
 
 export function transformSourceMapString (sourceMapString, {
   newFileRegex = defaultNewFileRegex,
@@ -24,7 +28,8 @@ export function transformSourceMapString (sourceMapString, {
   newFileColumnNumber = defaultNewFileColumnNumber,
   prevFileFormattingSpaces = defaultPrevFileFormattingSpaces,
   prevFileLineNumber = defaultPrevFileLineNumber,
-  prevFileColumnNumber = defaultPrevFileColumnNumber
+  prevFileColumnNumber = defaultPrevFileColumnNumber,
+  cache = true
 } = {}) {
   let lastSmc;
   return sourceMapString.split('\n').map(function (line) {
@@ -35,7 +40,7 @@ export function transformSourceMapString (sourceMapString, {
       const lineNumber = newFileLineNumber(match);
       const columnNumber = newFileColumnNumber(match);
 
-      if (!smcCache[filePath]) {
+      if (!smcCache[filePath] || !cache) {
         const rawSourceMap = getRawSourceMap(filePath);
         lastSmc = new SourceMapConsumer(rawSourceMap);
         smcCache[filePath] = lastSmc;
@@ -64,7 +69,7 @@ export function transformSourceMapString (sourceMapString, {
   }).join('\n');
 }
 
-export function createSourceMapTransformer (opts) {
+export function createSourceMapTransformer (opts = {}) {
   const sourceMapTransformer = new stream.Transform({objectMode: true});
   sourceMapTransformer._transform = function (chunk, something, done) {
     const transformedChunk = transformSourceMapString(chunk.toString(), opts);
@@ -73,6 +78,9 @@ export function createSourceMapTransformer (opts) {
   };
 
   sourceMapTransformer._flush = function (done) {
+    if (opts.emptyCache) {
+      emptyCache();
+    }
     done();
   };
 
