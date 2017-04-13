@@ -1346,18 +1346,22 @@ function transformSourceMapString(sourceMapString) {
       var lineNumber = newFileLineNumber(match);
       var columnNumber = newFileColumnNumber(match);
 
-      if (!smcCache[filePath] || !cache) {
-        var rawSourceMap = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["a" /* getRawSourceMap */])(filePath);
-        lastSmc = new __WEBPACK_IMPORTED_MODULE_1_source_map__["SourceMapConsumer"](rawSourceMap);
-        smcCache[filePath] = lastSmc;
-      } else {
-        lastSmc = smcCache[filePath];
+      try {
+        if (!smcCache[filePath] || !cache) {
+          var rawSourceMap = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["a" /* getRawSourceMap */])(filePath); // May throw if no map found
+          lastSmc = new __WEBPACK_IMPORTED_MODULE_1_source_map__["SourceMapConsumer"](rawSourceMap);
+          smcCache[filePath] = lastSmc;
+        } else {
+          lastSmc = smcCache[filePath];
+        }
+        var originalPosition = lastSmc.originalPositionFor({
+          line: lineNumber,
+          column: columnNumber
+        });
+        return originalPositionString(formattingSpaces, originalPosition, line, match);
+      } catch (err) {
+        return originalPositionString(formattingSpaces, {}, line, match);
       }
-      var originalPosition = lastSmc.originalPositionFor({
-        line: lineNumber,
-        column: columnNumber
-      });
-      return originalPositionString(formattingSpaces, originalPosition, line, match);
     }
     if (prevFileRegex.test(line) && lastSmc) {
       var _match = line.match(prevFileRegex);

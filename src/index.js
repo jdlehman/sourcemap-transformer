@@ -42,18 +42,22 @@ export function transformSourceMapString (sourceMapString, {
       const lineNumber = newFileLineNumber(match);
       const columnNumber = newFileColumnNumber(match);
 
-      if (!smcCache[filePath] || !cache) {
-        const rawSourceMap = getRawSourceMap(filePath);
-        lastSmc = new SourceMapConsumer(rawSourceMap);
-        smcCache[filePath] = lastSmc;
-      } else {
-        lastSmc = smcCache[filePath];
+      try {
+        if (!smcCache[filePath] || !cache) {
+          const rawSourceMap = getRawSourceMap(filePath); // May throw if no map found
+          lastSmc = new SourceMapConsumer(rawSourceMap);
+          smcCache[filePath] = lastSmc;
+        } else {
+          lastSmc = smcCache[filePath];
+        }
+        const originalPosition = lastSmc.originalPositionFor({
+          line: lineNumber,
+          column: columnNumber
+        });
+        return originalPositionString(formattingSpaces, originalPosition, line, match);
+      } catch (err) {
+        return originalPositionString(formattingSpaces, {}, line, match);
       }
-      const originalPosition = lastSmc.originalPositionFor({
-        line: lineNumber,
-        column: columnNumber
-      });
-      return originalPositionString(formattingSpaces, originalPosition, line, match);
     }
     if (prevFileRegex.test(line) && lastSmc) {
       const match = line.match(prevFileRegex);
