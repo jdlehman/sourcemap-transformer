@@ -1298,6 +1298,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_source_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_source_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__helpers__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__defaultConfig__ = __webpack_require__(4);
+/* harmony export (immutable) */ __webpack_exports__["emptyCache"] = emptyCache;
 /* harmony export (immutable) */ __webpack_exports__["transformSourceMapString"] = transformSourceMapString;
 /* harmony export (immutable) */ __webpack_exports__["createSourceMapTransformer"] = createSourceMapTransformer;
 
@@ -1306,6 +1307,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 var smcCache = {};
+
+function emptyCache() {
+  smcCache = {};
+}
 
 function transformSourceMapString(sourceMapString) {
   var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
@@ -1326,7 +1331,9 @@ function transformSourceMapString(sourceMapString) {
       _ref$prevFileLineNumb = _ref.prevFileLineNumber,
       prevFileLineNumber = _ref$prevFileLineNumb === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["h" /* defaultPrevFileLineNumber */] : _ref$prevFileLineNumb,
       _ref$prevFileColumnNu = _ref.prevFileColumnNumber,
-      prevFileColumnNumber = _ref$prevFileColumnNu === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["i" /* defaultPrevFileColumnNumber */] : _ref$prevFileColumnNu;
+      prevFileColumnNumber = _ref$prevFileColumnNu === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["i" /* defaultPrevFileColumnNumber */] : _ref$prevFileColumnNu,
+      _ref$cache = _ref.cache,
+      cache = _ref$cache === undefined ? true : _ref$cache;
 
   var lastSmc = void 0;
   return sourceMapString.split('\n').map(function (line) {
@@ -1337,7 +1344,7 @@ function transformSourceMapString(sourceMapString) {
       var lineNumber = newFileLineNumber(match);
       var columnNumber = newFileColumnNumber(match);
 
-      if (!smcCache[filePath]) {
+      if (!smcCache[filePath] || !cache) {
         var rawSourceMap = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["a" /* getRawSourceMap */])(filePath);
         lastSmc = new __WEBPACK_IMPORTED_MODULE_1_source_map__["SourceMapConsumer"](rawSourceMap);
         smcCache[filePath] = lastSmc;
@@ -1366,7 +1373,9 @@ function transformSourceMapString(sourceMapString) {
   }).join('\n');
 }
 
-function createSourceMapTransformer(opts) {
+function createSourceMapTransformer() {
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
   var sourceMapTransformer = new __WEBPACK_IMPORTED_MODULE_0_stream___default.a.Transform({ objectMode: true });
   sourceMapTransformer._transform = function (chunk, something, done) {
     var transformedChunk = transformSourceMapString(chunk.toString(), opts);
@@ -1375,6 +1384,9 @@ function createSourceMapTransformer(opts) {
   };
 
   sourceMapTransformer._flush = function (done) {
+    if (opts.emptyCache) {
+      emptyCache();
+    }
     done();
   };
 
