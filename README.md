@@ -136,6 +136,22 @@ Used in conjunction with the `newFileRegex`, this option is a function that rece
 
 Used in conjunction with the `prevFileRegex`, this option is a function that receives the match array from the `prevFileRegex` and returns a string representing the column number referenced in the input stream.
 
+#### cache
+
+> boolean = true
+
+Determines whether to cache parsed source maps for reuse.
+
+#### emptyCache
+
+> boolean = false
+
+Only available to `createSourceMapTransformer`. Automatically empties the cache after a stream is completed.
+
+### emptyCache()
+
+This method will empty any cache built up by `createSourceMapTransformer` or `transformSourceMapString`.
+
 ### Example using custom configuration
 
 ```js
