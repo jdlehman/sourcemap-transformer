@@ -35,10 +35,3 @@ export function getRawSourceMap (filePath) {
 
   return JSON.parse(rawSourceMap);
 }
-
-export function originalPositionStr (formattingSpaces, originalPosition, untransformedOutput) {
-  if (originalPosition.source) {
-    return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
-  }
-  return untransformedOutput;
-}

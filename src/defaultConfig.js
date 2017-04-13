@@ -28,3 +28,10 @@ export function defaultPrevFileLineNumber (match) {
 export function defaultPrevFileColumnNumber (match) {
   return 0;
 }
+
+export function defaultOriginalPositionString (formattingSpaces, originalPosition, untransformedOutput /*, prev=false */) {
+  if (originalPosition.source) {
+    return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
+  }
+  return untransformedOutput;
+}

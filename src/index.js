@@ -1,6 +1,6 @@
 import stream from 'stream';
 import {SourceMapConsumer} from 'source-map';
-import {originalPositionStr, getRawSourceMap} from './helpers';
+import {getRawSourceMap} from './helpers';
 import {
   defaultNewFileRegex,
   defaultPrevFileRegex,
@@ -10,7 +10,8 @@ import {
   defaultNewFileColumnNumber,
   defaultPrevFileFormattingSpaces,
   defaultPrevFileLineNumber,
-  defaultPrevFileColumnNumber
+  defaultPrevFileColumnNumber,
+  defaultOriginalPositionString
 } from './defaultConfig';
 
 let smcCache = {};
@@ -29,6 +30,7 @@ export function transformSourceMapString (sourceMapString, {
   prevFileFormattingSpaces = defaultPrevFileFormattingSpaces,
   prevFileLineNumber = defaultPrevFileLineNumber,
   prevFileColumnNumber = defaultPrevFileColumnNumber,
+  originalPositionString = defaultOriginalPositionString,
   cache = true
 } = {}) {
   let lastSmc;
@@ -51,7 +53,7 @@ export function transformSourceMapString (sourceMapString, {
         line: lineNumber,
         column: columnNumber
       });
-      return originalPositionStr(formattingSpaces, originalPosition, line);
+      return originalPositionString(formattingSpaces, originalPosition, line);
     }
     if (prevFileRegex.test(line) && lastSmc) {
       const match = line.match(prevFileRegex);
@@ -63,7 +65,7 @@ export function transformSourceMapString (sourceMapString, {
         line: lineNumber,
         column: columnNumber
       });
-      return originalPositionStr(formattingSpaces, originalPosition, line);
+      return originalPositionString(formattingSpaces, originalPosition, line, true);
     }
     return line;
   }).join('\n');

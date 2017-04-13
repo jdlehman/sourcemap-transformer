@@ -1179,6 +1179,7 @@ exports.SourceMapGenerator = SourceMapGenerator;
 /* harmony export (immutable) */ __webpack_exports__["g"] = defaultPrevFileFormattingSpaces;
 /* harmony export (immutable) */ __webpack_exports__["h"] = defaultPrevFileLineNumber;
 /* harmony export (immutable) */ __webpack_exports__["i"] = defaultPrevFileColumnNumber;
+/* harmony export (immutable) */ __webpack_exports__["j"] = defaultOriginalPositionString;
 var defaultNewFileRegex = /^(\s*)at file:\/\/(.+):(\d+)/;
 var defaultPrevFileRegex = /^(\s*)at.*:(\d+)/;
 
@@ -1210,6 +1211,13 @@ function defaultPrevFileColumnNumber(match) {
   return 0;
 }
 
+function defaultOriginalPositionString(formattingSpaces, originalPosition, untransformedOutput /*, prev=false */) {
+  if (originalPosition.source) {
+    return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
+  }
+  return untransformedOutput;
+}
+
 /***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1220,7 +1228,6 @@ function defaultPrevFileColumnNumber(match) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_path__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_path___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_path__);
 /* harmony export (immutable) */ __webpack_exports__["a"] = getRawSourceMap;
-/* harmony export (immutable) */ __webpack_exports__["b"] = originalPositionStr;
 
 
 
@@ -1257,13 +1264,6 @@ function getRawSourceMap(filePath) {
   }
 
   return JSON.parse(rawSourceMap);
-}
-
-function originalPositionStr(formattingSpaces, originalPosition, untransformedOutput) {
-  if (originalPosition.source) {
-    return formattingSpaces + originalPosition.source + ':' + originalPosition.line + ':' + originalPosition.column;
-  }
-  return untransformedOutput;
 }
 
 /***/ }),
@@ -1332,6 +1332,8 @@ function transformSourceMapString(sourceMapString) {
       prevFileLineNumber = _ref$prevFileLineNumb === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["h" /* defaultPrevFileLineNumber */] : _ref$prevFileLineNumb,
       _ref$prevFileColumnNu = _ref.prevFileColumnNumber,
       prevFileColumnNumber = _ref$prevFileColumnNu === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["i" /* defaultPrevFileColumnNumber */] : _ref$prevFileColumnNu,
+      _ref$originalPosition = _ref.originalPositionString,
+      originalPositionString = _ref$originalPosition === undefined ? __WEBPACK_IMPORTED_MODULE_3__defaultConfig__["j" /* defaultOriginalPositionString */] : _ref$originalPosition,
       _ref$cache = _ref.cache,
       cache = _ref$cache === undefined ? true : _ref$cache;
 
@@ -1355,7 +1357,7 @@ function transformSourceMapString(sourceMapString) {
         line: lineNumber,
         column: columnNumber
       });
-      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(formattingSpaces, originalPosition, line);
+      return originalPositionString(formattingSpaces, originalPosition, line);
     }
     if (prevFileRegex.test(line) && lastSmc) {
       var _match = line.match(prevFileRegex);
@@ -1367,7 +1369,7 @@ function transformSourceMapString(sourceMapString) {
         line: _lineNumber,
         column: _columnNumber
       });
-      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__helpers__["b" /* originalPositionStr */])(_formattingSpaces, _originalPosition, line);
+      return originalPositionString(_formattingSpaces, _originalPosition, line, true);
     }
     return line;
   }).join('\n');
