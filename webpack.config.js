@@ -1,3 +1,5 @@
+const dev = false;
+
 const webpack = require('webpack');
 const path = require('path');
 
@@ -23,7 +25,8 @@ function addPlugins (obj, i) {
       },
       output: {
         comments: false
-      }
+      },
+      sourceMap: true
     }));
   }
   return obj;
@@ -52,6 +55,7 @@ const cfg = {
     extensions: ['.js'],
     modules: ['node_modules', path.join(__dirname, 'src'), __dirname]
   },
+  devtool: dev ? 'eval-cheap-module-source-map' : 'source-map',
   target: 'node'
 };
 
